@@ -83,20 +83,18 @@ class Snake extends GameObject{
         // A matrix for rotating
         matrix.preRotate(-90);
         mBitmapHeadUp = Bitmap.createBitmap(mBitmapHeadRight,
-                        0, 0, ss, ss, matrix, true);
+                0, 0, ss, ss, matrix, true);
 
         // Matrix operations are cumulative
         // so rotate by 180 to face down
         matrix.preRotate(180);
         mBitmapHeadDown = Bitmap.createBitmap(mBitmapHeadRight,
-                        0, 0, ss, ss, matrix, true);
+                0, 0, ss, ss, matrix, true);
 
         // Create and scale the body
-        mBitmapBody = BitmapFactory.decodeResource(context.getResources(),
-                        R.drawable.body);
+        mBitmapBody = BitmapFactory.decodeResource(context.getResources(), R.drawable.body);
 
-        mBitmapBody = Bitmap.createScaledBitmap(mBitmapBody,
-                        ss, ss, false);
+        mBitmapBody = Bitmap.createScaledBitmap(mBitmapBody, ss, ss, false);
 
         // The halfway point across the screen in pixels
         // Used to detect which side of screen was pressed
