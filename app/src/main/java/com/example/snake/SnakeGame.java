@@ -40,7 +40,7 @@ class SnakeGame extends SurfaceView implements Runnable {
 
     // GameObject variables
     private SnakeComposite mSnake;
-    private Apple mApple;
+    private AppleBuilder mApple;
 
     // This is the constructor method that gets called
     // from SnakeActivity
@@ -62,7 +62,7 @@ class SnakeGame extends SurfaceView implements Runnable {
             mSoundManager = new SoundManager(new PreLollipopSoundManager(context));
 
         // Call the constructors of our two game objects
-        mApple = new Apple(context,
+        mApple = new AppleBuilder(context,
                 new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh), blockSize);
 
         mSnake = new SnakeComposite(context,
@@ -126,7 +126,7 @@ class SnakeGame extends SurfaceView implements Runnable {
         ++mMoveCount;
 
         if(mMoveCount >= 5) {
-            mApple.spawn();
+            mApple.spawnApple();
             mMoveCount = 0;
         }
 

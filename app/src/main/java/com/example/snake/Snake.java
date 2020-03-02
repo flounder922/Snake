@@ -175,10 +175,13 @@ class Snake extends GameObject{
         return dead;
     }
 
-    boolean checkDinner(Point l) {
+    boolean checkDinner(ArrayList<Point> l) {
         //if (snakeXs[0] == l.x && snakeYs[0] == l.y) {
-        if (segmentLocations.get(0).x == l.x && segmentLocations.get(0).y == l.y) {
-            return true;
+        for( int i = 0; i < l.size(); ++i) {
+            if (segmentLocations.get(0).x == l.get(i).x &&
+                    segmentLocations.get(0).y == l.get(i).y) {
+                return true;
+            }
         }
         return false;
     }
