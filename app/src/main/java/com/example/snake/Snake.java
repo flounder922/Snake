@@ -113,7 +113,6 @@ class Snake extends GameObject{
         segmentLocations.add(new Point(w / 2, h / 2));
     }
 
-
     void move() {
         // Move the body
         // Start at the back and move it
@@ -175,15 +174,14 @@ class Snake extends GameObject{
         return dead;
     }
 
-    boolean checkDinner(ArrayList<Point> l) {
-        //if (snakeXs[0] == l.x && snakeYs[0] == l.y) {
+    int checkDinner(ArrayList<Apple> l) {
         for( int i = 0; i < l.size(); ++i) {
-            if (segmentLocations.get(0).x == l.get(i).x &&
-                    segmentLocations.get(0).y == l.get(i).y) {
-                return true;
+            if (segmentLocations.get(0).x == l.get(i).getX() &&
+                    segmentLocations.get(0).y == l.get(i).getY()) {
+                return i;
             }
         }
-        return false;
+        return 0;
     }
 
     void draw(Canvas canvas, Paint paint) {
@@ -272,5 +270,15 @@ class Snake extends GameObject{
     void add(Point point) {
         // Add a new segment to the snake.
         segmentLocations.add(point);
+    }
+
+    boolean eatApple(ArrayList<Apple> apple) {
+        for( int i = 0; i < apple.size(); ++i) {
+            if (segmentLocations.get(0).x == apple.get(i).getX() &&
+                    segmentLocations.get(0).y == apple.get(i).getY()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

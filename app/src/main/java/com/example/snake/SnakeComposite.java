@@ -6,6 +6,8 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.view.MotionEvent;
 
+import java.util.ArrayList;
+
 public class SnakeComposite {
     public Snake snake;
 
@@ -21,12 +23,12 @@ public class SnakeComposite {
         return snake.detectDeath();
     }
 
-    boolean checkDinner(Point l) {
-        if( snake.checkDinner(l) ) {
-            snake.add(new Point(-10, -10));
-            return true;
-        }
-        return false;
+    int checkDinner(ArrayList<Apple> l) {
+        return snake.checkDinner(l);
+    }
+
+    boolean eatApple(ArrayList<Apple> apple) {
+        return snake.eatApple(apple);
     }
 
     void draw(Canvas canvas, Paint paint) {

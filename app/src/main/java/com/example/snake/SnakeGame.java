@@ -31,10 +31,7 @@ class SnakeGame extends SurfaceView implements Runnable {
 
     // How many points does the player have
     private int mScore;
-    private int mMoveCount;
 
-    // Objects for drawing
-    private Canvas mCanvas;
     private SurfaceHolder mSurfaceHolder;
     private Paint mPaint;
 
@@ -46,7 +43,6 @@ class SnakeGame extends SurfaceView implements Runnable {
     // from SnakeActivity
     public SnakeGame(Context context, Point size) {
         super(context);
-
         // Work out how many pixels each block is
         int blockSize = size.x / NUM_BLOCKS_WIDE;
         // How many blocks of the same size will fit into the height
@@ -75,7 +71,7 @@ class SnakeGame extends SurfaceView implements Runnable {
         mSnake.reset(NUM_BLOCKS_WIDE, mNumBlocksHigh);
 
         // Get the apple ready for dinner
-        mApple.spawn();
+        mApple.spawnedApples.add(mApple.createGoodApple());
 
         // Reset the mScore
         mScore = 0;
@@ -120,23 +116,27 @@ class SnakeGame extends SurfaceView implements Runnable {
 
     // Update all the game objects
     public void update() {
-
         // Move the snake
         mSnake.move();
-        ++mMoveCount;
-
-        if(mMoveCount >= 5) {
-            mApple.spawnApple();
-            mMoveCount = 0;
-        }
 
         // Did the head of the snake eat the apple?
-        if(mSnake.checkDinner(mApple.getLocation())){
-            // This reminds me of Edge of Tomorrow.
+        if(mSnake.eatApple(mApple.spawnedApples)) {
+            int i = mSnake.checkDinner(mApple.spawnedApples);
             // One day the apple will be ready!
-
             // Add to  mScore
-            mScore = mScore + 1;
+            mScore += mApple.spawnedApples.get(i).appleEaten();
+            mApple.spawnedApples.remove(i);
+            mApple.spawnApple();
+            mApple.spawnApple();
+            mApple.spawnApple();
+            mApple.spawnApple();
+            mApple.spawnApple();
+
+            if((mScore % 5) > 0 && (mScore / 5) > 1) {
+                int numberOfApples = mScore / 5;
+                while(numberOfApples > mApple.spawnedApples.size())
+                    mApple.spawnApple();
+            }
 
             // Play a sound
             mSoundManager.strategyPlayEatSound();
@@ -149,6 +149,10 @@ class SnakeGame extends SurfaceView implements Runnable {
             mPaused =true;
         }
 
+        if(mScore < 0) {
+            mSoundManager.strategyPlayDeathSound();
+            mPaused = true;
+        }
     }
 
 
@@ -156,7 +160,8 @@ class SnakeGame extends SurfaceView implements Runnable {
     public void draw() {
         // Get a lock on the mCanvas
         if (mSurfaceHolder.getSurface().isValid()) {
-            mCanvas = mSurfaceHolder.lockCanvas();
+            // Objects for drawing
+            Canvas mCanvas = mSurfaceHolder.lockCanvas();
 
             // Fill the screen with a color
             mCanvas.drawColor(Color.argb(255, 26, 128, 182));
@@ -182,9 +187,7 @@ class SnakeGame extends SurfaceView implements Runnable {
                 // Draw the message
                 // We will give this an international upgrade soon
                 //mCanvas.drawText("Tap To Play!", 200, 700, mPaint);
-                mCanvas.drawText(getResources().
-                                getString(R.string.tap_to_play),
-                        200, 700, mPaint);
+                mCanvas.drawText("Tap to Play!", 200, 700, mPaint);
             }
             // Unlock the mCanvas and reveal the graphics for this frame
             mSurfaceHolder.unlockCanvasAndPost(mCanvas);

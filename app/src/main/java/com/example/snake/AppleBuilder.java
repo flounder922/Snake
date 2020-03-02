@@ -12,71 +12,61 @@ import java.util.Random;
 
 class AppleBuilder extends GameObject{
 
-    public ArrayList<Apple> spawnedApples;
+    public ArrayList<Apple> spawnedApples = new ArrayList<Apple>();
     // The location of the apple on the grid
     // Not in pixels
-    private ArrayList<Point> location;
+    //private ArrayList<Point> location;
 
     // The range of values we can choose from
     // to spawn an apple
     private Point mSpawnRange;
     private int mSize;
+    private Context context;
 
     // An image to represent the apple
     private Bitmap mBitmapApple;
 
     /// Set up the apple in the constructor
     AppleBuilder(Context context, Point sr, int s){
+        this.context = context;
         // Make a note of the passed in spawn range
         mSpawnRange = sr;
         // Make a note of the size of an apple
         mSize = s;
-
-        // Load the image to the bitmap
-        mBitmapApple = BitmapFactory.decodeResource(context.getResources(), R.drawable.apple);
-
-        // Resize the bitmap
-        mBitmapApple = Bitmap.createScaledBitmap(mBitmapApple, s, s, false);
     }
 
     void spawnApple () {
         Random random = new Random();
-        if (random.nextInt(10) <= 1)
+        if (random.nextInt(10) + 1 <= 2)
             spawnedApples.add(createBadApple());
         else
             spawnedApples.add(createGoodApple());
     }
 
     Apple createGoodApple() {
-        return new GoodAppleBuilder(mSpawnRange).setPoints().spawnLocation().build();
+        // Load the right apple image into the apple bitmap
+        mBitmapApple = BitmapFactory.decodeResource(context.getResources(), R.drawable.apple);
+        // Resize the Bitmap
+        mBitmapApple = Bitmap.createScaledBitmap(mBitmapApple, mSize, mSize, false);
+        return new GoodAppleBuilder(mSpawnRange, mBitmapApple).setPoints().spawnLocation().build();
     }
 
     Apple createBadApple() {
-        return new BadAppleBuilder(mSpawnRange).setPoints().spawnLocation().build();
-    }
-
-    // This is called every time an apple is eaten
-/*    void spawn(){
-        // Choose two random values and place the apple
-        Random random = new Random();
-        location.x = random.nextInt(mSpawnRange.x) + 1;
-        location.y = random.nextInt(mSpawnRange.y - 1) + 1;
-    }*/
-
-    // Let SnakeGame know where the apple is
-    // SnakeGame can share this with the snake
-    ArrayList<Point> getLocation(){
-         for (int i = 0; i < spawnedApples.size(); ++i) {
-             location.add(spawnedApples.get(i).location);
-         }
-        return location;
+        // Load the right apple image into the apple bitmap
+        mBitmapApple = BitmapFactory.decodeResource(context.getResources(), R.drawable.bad_apple);
+        // Resize the Bitmap
+        mBitmapApple = Bitmap.createScaledBitmap(mBitmapApple, mSize, mSize, false);
+        return new BadAppleBuilder(mSpawnRange, mBitmapApple).setPoints().spawnLocation().build();
     }
 
     // Draw the apple
-    void draw(Canvas canvas, Paint paint){
-        canvas.drawBitmap(mBitmapApple,
-                location.x * mSize, location.y * mSize, paint);
+    void draw(Canvas canvas, Paint paint) {
+        for (int i = 0; i < spawnedApples.size(); ++i) {
+            canvas.drawBitmap(spawnedApples.get(i).getBitmap(),
+                    spawnedApples.get(i).getLocation().x * mSize,
+                    spawnedApples.get(i).getLocation().y * mSize, paint);
 
+        }
     }
 
 }
