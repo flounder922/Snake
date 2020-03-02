@@ -9,11 +9,11 @@ import android.graphics.Point;
 
 import java.util.Random;
 
+// Director for what apples need to be built
 class Apple extends GameObject{
-
     // The location of the apple on the grid
     // Not in pixels
-    private Point location = new Point();
+    private Point location;
 
     // The range of values we can choose from
     // to spawn an apple
@@ -25,17 +25,16 @@ class Apple extends GameObject{
 
     /// Set up the apple in the constructor
     Apple(Context context, Point sr, int s){
-
+        super(context, sr, s);
         // Make a note of the passed in spawn range
         mSpawnRange = sr;
         // Make a note of the size of an apple
         mSize = s;
         // Hide the apple off-screen until the game starts
+        location = gameObjectPoint;
         location.x = -10;
-
         // Load the image to the bitmap
         mBitmapApple = BitmapFactory.decodeResource(context.getResources(), R.drawable.apple);
-
         // Resize the bitmap
         mBitmapApple = Bitmap.createScaledBitmap(mBitmapApple, s, s, false);
     }
@@ -60,5 +59,4 @@ class Apple extends GameObject{
                 location.x * mSize, location.y * mSize, paint);
 
     }
-
 }

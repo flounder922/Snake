@@ -10,6 +10,8 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.util.List;
+
 class SnakeGame extends SurfaceView implements Runnable {
 
     // Objects for the game loop/thread
@@ -28,9 +30,13 @@ class SnakeGame extends SurfaceView implements Runnable {
     // The size in segments of the playable area
     private final int NUM_BLOCKS_WIDE = 40;
     private int mNumBlocksHigh;
+    private Context context;
+    private Point mPoint;
+    private int blockSize;
 
     // How many points does the player have
     private int mScore;
+    private int mMoveCount;
 
     // Objects for drawing
     private Canvas mCanvas;
@@ -39,18 +45,17 @@ class SnakeGame extends SurfaceView implements Runnable {
 
     // GameObject variables
     private Snake mSnake;
-    private Apple mApple;
+    private List<Apple> mApple;
 
     // This is the constructor method that gets called
     // from SnakeActivity
     public SnakeGame(Context context, Point size) {
         super(context);
-
+        this.context = context;
         // Work out how many pixels each block is
-        int blockSize = size.x / NUM_BLOCKS_WIDE;
+        blockSize = size.x / NUM_BLOCKS_WIDE;
         // How many blocks of the same size will fit into the height
         mNumBlocksHigh = size.y / blockSize;
-
         // Initialize the drawing objects
         mSurfaceHolder = getHolder();
         mPaint = new Paint();
@@ -60,12 +65,10 @@ class SnakeGame extends SurfaceView implements Runnable {
         else
             mSoundManager = new SoundManager(new PreLollipopSoundManager(context));
 
+        mPoint = new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh);
         // Call the constructors of our two game objects
-        mApple = new Apple(context,
-                new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh), blockSize);
-
-        mSnake = new Snake(context,
-                new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh), blockSize);
+        mApple.add(new Apple(context, mPoint, blockSize));
+        mSnake = new Snake(context, mPoint, blockSize);
     }
 
     // Called to start a new game
@@ -74,7 +77,7 @@ class SnakeGame extends SurfaceView implements Runnable {
         mSnake.reset(NUM_BLOCKS_WIDE, mNumBlocksHigh);
 
         // Get the apple ready for dinner
-        mApple.spawn();
+        mApple.add(new Apple(context, mPoint, blockSize));
 
         // Reset the mScore
         mScore = 0;
@@ -123,11 +126,18 @@ class SnakeGame extends SurfaceView implements Runnable {
         // Move the snake
         mSnake.move();
 
+        if(mMoveCount >= 5) {
+            mMoveCount = 0;
+            mApple.add(new Apple(context, mPoint, blockSize));
+        }
+        else
+            ++mMoveCount;
+
         // Did the head of the snake eat the apple?
-        if(mSnake.checkDinner(mApple.getLocation())){
+        if(mSnake.checkDinner(mApple){
             // This reminds me of Edge of Tomorrow.
             // One day the apple will be ready!
-            mApple.spawn();
+            //mApple.spawn();
 
             // Add to  mScore
             mScore = mScore + 1;

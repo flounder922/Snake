@@ -10,6 +10,7 @@ import android.graphics.Point;
 import android.view.MotionEvent;
 
 import java.util.ArrayList;
+import java.util.List;
 
 class Snake extends GameObject{
 
@@ -45,7 +46,7 @@ class Snake extends GameObject{
 
 
     Snake(Context context, Point mr, int ss) {
-
+        super(context, mr);
         // Initialize our ArrayList
         segmentLocations = new ArrayList<>();
 
@@ -103,7 +104,6 @@ class Snake extends GameObject{
 
     // Get the snake ready for a new game
     void reset(int w, int h) {
-
         // Reset the heading
         heading = Heading.RIGHT;
 
@@ -177,18 +177,18 @@ class Snake extends GameObject{
         return dead;
     }
 
-    boolean checkDinner(Point l) {
+    boolean checkDinner(List apples) {
         //if (snakeXs[0] == l.x && snakeYs[0] == l.y) {
-        if (segmentLocations.get(0).x == l.x &&
-                segmentLocations.get(0).y == l.y) {
+        for (int i = 0; i < apples.size(); ++i) {
 
-            // Add a new Point to the list
-            // located off-screen.
-            // This is OK because on the next call to
-            // move it will take the position of
-            // the segment in front of it
-            segmentLocations.add(new Point(-10, -10));
-            return true;
+            if (segmentLocations.get(0).x == apples.get(i).x && segmentLocations.get(0).y == apples.get(i).y) {
+                // Add a new Point to the list located off-screen.
+                // This is OK because on the next call to
+                // move it will take the position of
+                // the segment in front of it.
+                segmentLocations.add(new Point(-10, -10));
+                return true;
+            }
         }
         return false;
     }
