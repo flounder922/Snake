@@ -43,7 +43,6 @@ class Snake extends GameObject{
     // A bitmap for the body
     private Bitmap mBitmapBody;
 
-
     Snake(Context context, Point mr, int ss) {
 
         // Initialize our ArrayList
@@ -149,7 +148,6 @@ class Snake extends GameObject{
                 p.x--;
                 break;
         }
-
     }
 
     boolean detectDeath() {
@@ -179,15 +177,7 @@ class Snake extends GameObject{
 
     boolean checkDinner(Point l) {
         //if (snakeXs[0] == l.x && snakeYs[0] == l.y) {
-        if (segmentLocations.get(0).x == l.x &&
-                segmentLocations.get(0).y == l.y) {
-
-            // Add a new Point to the list
-            // located off-screen.
-            // This is OK because on the next call to
-            // move it will take the position of
-            // the segment in front of it
-            segmentLocations.add(new Point(-10, -10));
+        if (segmentLocations.get(0).x == l.x && segmentLocations.get(0).y == l.y) {
             return true;
         }
         return false;
@@ -236,7 +226,6 @@ class Snake extends GameObject{
         }
     }
 
-
     // Handle changing direction
     void switchHeading(MotionEvent motionEvent) {
 
@@ -275,5 +264,10 @@ class Snake extends GameObject{
                     break;
             }
         }
+    }
+
+    void add(Point point) {
+        // Add a new segment to the snake.
+        segmentLocations.add(point);
     }
 }

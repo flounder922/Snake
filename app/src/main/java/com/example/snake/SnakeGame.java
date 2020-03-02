@@ -31,6 +31,7 @@ class SnakeGame extends SurfaceView implements Runnable {
 
     // How many points does the player have
     private int mScore;
+    private int mMoveCount;
 
     // Objects for drawing
     private Canvas mCanvas;
@@ -38,7 +39,7 @@ class SnakeGame extends SurfaceView implements Runnable {
     private Paint mPaint;
 
     // GameObject variables
-    private Snake mSnake;
+    private SnakeComposite mSnake;
     private Apple mApple;
 
     // This is the constructor method that gets called
@@ -64,7 +65,7 @@ class SnakeGame extends SurfaceView implements Runnable {
         mApple = new Apple(context,
                 new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh), blockSize);
 
-        mSnake = new Snake(context,
+        mSnake = new SnakeComposite(context,
                 new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh), blockSize);
     }
 
@@ -122,12 +123,17 @@ class SnakeGame extends SurfaceView implements Runnable {
 
         // Move the snake
         mSnake.move();
+        ++mMoveCount;
+
+        if(mMoveCount >= 5) {
+            mApple.spawn();
+            mMoveCount = 0;
+        }
 
         // Did the head of the snake eat the apple?
         if(mSnake.checkDinner(mApple.getLocation())){
             // This reminds me of Edge of Tomorrow.
             // One day the apple will be ready!
-            mApple.spawn();
 
             // Add to  mScore
             mScore = mScore + 1;
@@ -196,7 +202,7 @@ class SnakeGame extends SurfaceView implements Runnable {
                     return true;
                 }
                 // Let the Snake class handle the input
-                mSnake.switchHeading(motionEvent);
+                mSnake.changeDirection(motionEvent);
                 break;
             default:
                 break;
