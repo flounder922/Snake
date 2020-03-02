@@ -1,6 +1,8 @@
 package com.example.snake;
 
+import android.media.SoundPool;
+
 public interface SoundStrategy {
-    public void playEatSound();
-    public void playDeathSound();
+    void playEatSound();
+    void playDeathSound();
 }

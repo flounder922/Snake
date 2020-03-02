@@ -48,13 +48,11 @@ public class PostLollipopSoundManager implements SoundStrategy {
         }
     }
 
-    public void playEatSound(){
-        // Play a sound
+    public void playEatSound() {
         mSP.play(mEat_ID, 1, 1, 0, 0, 1);
     }
 
     public void playDeathSound() {
         mSP.play(mCrashID, 1, 1, 0, 0, 1);
     }
-
 }

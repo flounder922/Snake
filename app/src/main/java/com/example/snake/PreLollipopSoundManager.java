@@ -15,8 +15,7 @@ public class PreLollipopSoundManager implements SoundStrategy {
         mSP = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
     }
 
-    public void playEatSound(){
-        // Play a sound
+    public void playEatSound() {
         mSP.play(mEat_ID, 1, 1, 0, 0, 1);
     }
 
