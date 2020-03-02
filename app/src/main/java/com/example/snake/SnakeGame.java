@@ -1,20 +1,14 @@
 package com.example.snake;
 
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
-import android.content.res.AssetManager;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.media.AudioAttributes;
-import android.media.AudioManager;
-import android.media.SoundPool;
 import android.os.Build;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import java.io.IOException;
 
 class SnakeGame extends SurfaceView implements Runnable{
 
@@ -62,8 +56,10 @@ class SnakeGame extends SurfaceView implements Runnable{
         mSurfaceHolder = getHolder();
         mPaint = new Paint();
 
-        // Create the sound manager
-        mSoundManager = new SoundManager(context);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            mSoundManager = new SoundManager(new PostLollipopSoundManager(context));
+        else
+            mSoundManager = new SoundManager(new PreLollipopSoundManager(context));
 
         // Call the constructors of our two game objects
         mApple = new Apple(context,
@@ -147,12 +143,12 @@ class SnakeGame extends SurfaceView implements Runnable{
             mScore = mScore + 1;
 
             // Play a sound
-            mSoundManager.playEatSound();
+            mSoundManager.strategyPlayEatSound();
         }
 
         // Did the snake die?
         if (mSnake.detectDeath()) {
-            mSoundManager.playDeathSound();
+            mSoundManager.strategyPlayDeathSound();
             // Pause the game ready to start again
             mPaused =true;
         }

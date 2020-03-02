@@ -12,7 +12,7 @@ import androidx.annotation.RequiresApi;
 
 import java.io.IOException;
 
-public class PostLollipopSoundManager extends SoundManager {
+public class PostLollipopSoundManager implements SoundStrategy {
 
     // for playing sound effects
     private SoundPool mSP;
@@ -21,7 +21,6 @@ public class PostLollipopSoundManager extends SoundManager {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     PostLollipopSoundManager(Context context) {
-        super(context);
 
         AudioAttributes audioAttributes = new AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_MEDIA)

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
 
-public class PreLollipopSoundManager extends SoundManager {
+public class PreLollipopSoundManager implements SoundStrategy {
 
     // for playing sound effects
     private SoundPool mSP;
@@ -12,8 +12,6 @@ public class PreLollipopSoundManager extends SoundManager {
     private int mCrashID = -1;
 
     PreLollipopSoundManager(Context context) {
-        super(context);
-
         mSP = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
     }
 

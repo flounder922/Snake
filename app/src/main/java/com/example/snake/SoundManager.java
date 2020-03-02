@@ -12,13 +12,20 @@ import android.os.Build.VERSION;
 import java.io.IOException;
 
 public class SoundManager {
+    private SoundStrategy strategy;
 
-    // for playing sound effects
-    private SoundPool mSP;
-    private int mEat_ID = -1;
-    private int mCrashID = -1;
+    public SoundManager(SoundStrategy strategy) {
+        this.strategy = strategy;
+    }
 
-    SoundManager(Context context) {
+    public void strategyPlayEatSound() {
+        strategy.playEatSound();
+    }
+
+    public void strategyPlayDeathSound() {
+        strategy.playDeathSound();
+    }
+    /*SoundManager(Context context) {
         //setupSoundManager(context);
         if (VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             AudioAttributes audioAttributes = new AudioAttributes.Builder()
@@ -67,5 +74,5 @@ public class SoundManager {
 
     public void playDeathSound() {
         mSP.play(mCrashID, 1, 1, 0, 0, 1);
-    }
+    }*/
 }
